@@ -120,6 +120,14 @@ function mp_stacks_forms_create_meta_box(){
 			'field_repeater' => 'mp_stacks_forms_fields',
 		),
 		array(
+			'field_id'			=> 'field_placeholder',
+			'field_title' 	=> __( 'Field Placeholder Text', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'If you want placeholder text to be displayed in this field before the user enters something, enter that here.', 'mp_stacks_forms' ),
+			'field_type' 	=> 'textbox',
+			'field_value' => '',
+			'field_repeater' => 'mp_stacks_forms_fields',
+		),
+		array(
 			'field_id'			=> 'field_type',
 			'field_title' 	=> __( 'Field Type', 'mp_stacks_forms'),
 			'field_description' 	=> __( 'What type of field should this be? Default: Single Line Text Field', 'mp_stacks_forms' ),
