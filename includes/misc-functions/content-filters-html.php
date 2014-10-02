@@ -186,5 +186,49 @@ function mp_stacks_forms_color_field( $post_id, $field_counter, $args = array() 
 	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="color" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-color" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" style="width:' . $args['field_width'] . '%">';
 	
 }
+
+/**
+ * This function returns the HTML for a date field
+ *
+ * @access   public
+ * @since    1.0.0
+ * @param    int $post_id The id of the brick this field is being used for.
+ * @param    int $field_counter The field number this field is in the form.
+ * @return   string The HTML for the text field.
+ */
+function mp_stacks_forms_date_field( $post_id, $field_counter, $args = array() ){
+	
+	$default_args = array(
+		'preset_value' => NULL,
+		'field_placeholder' => NULL,
+		'field_width' => NULL
+	);
+	
+	$args = wp_parse_args( $args, $default_args );
+	
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="date" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-date" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" style="width:' . $args['field_width'] . '%">';
+	
+}
+
+/**
+ * This function returns the HTML for a url field
+ *
+ * @access   public
+ * @since    1.0.0
+ * @param    int $post_id The id of the brick this field is being used for.
+ * @param    int $field_counter The field number this field is in the form.
+ * @return   string The HTML for the text field.
+ */
+function mp_stacks_forms_url_field( $post_id, $field_counter, $args = array() ){
+	
+	$default_args = array(
+		'preset_value' => NULL,
+		'field_placeholder' => NULL,
+		'field_width' => NULL
+	);
+	
+	$args = wp_parse_args( $args, $default_args );
+	
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="url" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-url" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" style="width:' . $args['field_width'] . '%">';
 	
 }
