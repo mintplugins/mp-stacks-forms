@@ -64,17 +64,18 @@ function mp_stacks_forms_default_css(){
 	
 	echo '<style type="text/css">';
 		
-		//Don't show List dots on this UL
+		//Styles for the UL containing the fields
 		echo '.mp-stacks-form-fields{';
 			echo 'list-style:none;';
+			echo 'margin:0px;';
 		echo '}';
 		
-		//No padding needed on color picker inputs
+		//Color Picker Input Styles
 		echo '.mp-stacks-forms-field-color{';
 			echo 'padding:0px;';
 		echo '}'; 
 		
-		//No margin-bottom after last field
+		//Override any user set margins on the last field in the form
 		echo '.mp-stacks-form-field:last-child{';
 			echo 'margin-bottom:0px!important;';
 		echo '}';
