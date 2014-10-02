@@ -145,8 +145,8 @@ function mp_stacks_forms_create_meta_box(){
 			'field_repeater' => 'mp_stacks_forms_fields',
 		),
 		array(
-			'field_id'			=> 'field_size',
-			'field_title' 	=> __( 'Field Size', 'mp_stacks_forms'),
+			'field_id'			=> 'field_width',
+			'field_title' 	=> __( 'Field Width', 'mp_stacks_forms'),
 			'field_description' 	=> __( 'What percentage should the width of this field be? Default: 50%', 'mp_stacks_forms' ),
 			'field_type' 	=> 'input_range',
 			'field_value' => '50',
