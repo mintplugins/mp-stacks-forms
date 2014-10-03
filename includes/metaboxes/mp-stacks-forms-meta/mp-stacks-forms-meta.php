@@ -141,6 +141,8 @@ function mp_stacks_forms_create_meta_box(){
 				'url' => __( 'URL Field', 'mp_stacks_forms' ),
 				'select' => __( 'Dropdown Select Field', 'mp_stacks_forms' ),
 				'color' => __( 'Color Picker', 'mp_stacks_forms' ),
+				'checkbox' => __( 'Checkboxes', 'mp_stacks_forms' ),
+				'radio' => __( 'Radio Buttons', 'mp_stacks_forms' ),
 			),
 			'field_repeater' => 'mp_stacks_forms_fields',
 		),
@@ -153,7 +155,7 @@ function mp_stacks_forms_create_meta_box(){
 			'field_repeater' => 'mp_stacks_forms_fields',
 		),
 		array(
-			'field_id'			=> 'field_select_options',
+			'field_id'			=> 'field_select_values',
 			'field_title' 	=> __( 'Dropdown Field Options', 'mp_stacks_forms'),
 			'field_description' 	=> __( 'Enter the options people can choose from in the dropdown - separated by commas (EG: Option 1, Option1, Option 3)', 'mp_stacks_forms' ),
 			'field_type' 	=> 'textarea',
@@ -161,6 +163,31 @@ function mp_stacks_forms_create_meta_box(){
 			'field_placeholder' => __('Option 1, Option 2, Option 3', 'mp_stacks_forms' ),
 			'field_repeater' => 'mp_stacks_forms_fields',
 		),
+		array(
+			'field_id'			=> 'field_post_meta',
+			'field_title' 	=> __( 'Post Meta Slug', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'Enter the Post Meta Slug this value will be saved to upon submit.', 'mp_stacks_forms' ),
+			'field_type' 	=> 'textarea',
+			'field_value' => '',
+			'field_placeholder' => __('Option 1, Option 2, Option 3', 'mp_stacks_forms' ),
+			'field_repeater' => 'mp_stacks_forms_fields',
+		),
+		array(
+			'field_id'			=> 'mp_stacks_forms_submit_button_showhider',
+			'field_title' 	=> __( 'Submit Button Options', 'mp_stacks_forms'),
+			'field_description' 	=> __( '', 'mp_stacks_forms' ),
+			'field_type' 	=> 'showhider',
+			'field_value' => '',
+		),
+		array(
+			'field_id'			=> 'mp_stacks_forms_submit_button_showhider',
+			'field_title' 	=> __( 'Submit Button Text', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'What should the submit button say? Default "Submit"', 'mp_stacks_forms' ),
+			'field_type' 	=> 'showhider',
+			'field_value' => '',
+			'field_showhider' => 'mp_stacks_forms_submit_button_showhider'
+		),
+	
 	);
 	
 	

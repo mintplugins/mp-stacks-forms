@@ -75,6 +75,26 @@ function mp_stacks_forms_default_css(){
 			echo 'padding:0px;';
 		echo '}'; 
 		
+		//Checkbox Input Styles
+		echo '.mp-stacks-forms-checkbox-container .mp-stacks-forms-field-description{';
+			echo 'display:inline;';
+			echo 'margin-left:5px;';
+		echo '}';
+		echo '.mp-stacks-forms-field-checkbox{';
+			echo 'width:inherit!important;';
+			echo 'display:inline-block';
+		echo '}'; 
+		
+		//Radio Input Styles
+		echo '.mp-stacks-forms-radio-container .mp-stacks-forms-field-description{';
+			echo 'display:inline;';
+			echo 'margin-left:5px;';
+		echo '}';
+		echo '.mp-stacks-forms-field-radio{';
+			echo 'width:inherit!important;';
+			echo 'display:inline-block';
+		echo '}'; 
+		
 		//Override any user set margins on the last field in the form
 		echo '.mp-stacks-form-field:last-child{';
 			echo 'margin-bottom:0px!important;';
