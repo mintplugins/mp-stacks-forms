@@ -35,6 +35,9 @@ function mp_stacks_forms_create_meta_box(){
 		'metabox_priority' => 'low' 
 	);
 	
+	$post_types_array = mp_core_get_all_post_types();
+	$post_types_array['post'] = 'Posts';
+	
 	/**
 	 * Array which stores all info about the options within the metabox
 	 *
@@ -54,6 +57,19 @@ function mp_stacks_forms_create_meta_box(){
 			'field_description' 	=> __( '', 'mp_stacks_forms' ),
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
+		),
+		array(
+			'field_id'			=> 'mp_stacks_forms_field_text_alignment',
+			'field_title' 	=> __( 'Form Field Alignments:', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'How should the form fields be aligned?', 'mp_stacks_forms' ),
+			'field_type' 	=> 'select',
+			'field_value' => 'left',
+			'field_select_values' => array( 
+				'left' => __('Left', 'mp_stacks_forms' ),
+				'center' => __('Center', 'mp_stacks_forms' ),
+				'right' => __('Right', 'mp_stacks_forms' ),
+			),
+			'field_showhider' => 'mp_stacks_form_style_settings',
 		),
 		array(
 			'field_id'			=> 'mp_stacks_forms_field_titles_font_size',
@@ -96,12 +112,20 @@ function mp_stacks_forms_create_meta_box(){
 			'field_showhider' => 'mp_stacks_form_style_settings',
 		),
 		array(
+			'field_id'			=> 'mp_stacks_forms_fields_showhider',
+			'field_title' 	=> __( 'Form Fields', 'mp_stacks_forms'),
+			'field_description' 	=> '',
+			'field_type' 	=> 'showhider',
+			'field_value' => '',
+		),
+		array(
 			'field_id'	 => 'mp_stacks_forms_field_repeater_title',
 			'field_title' => __( 'Form Field', 'mp_stacks'),
 			'field_description' => __( '', 'mp_stacks' ),
 			'field_type' => 'repeatertitle',
 			'field_value' => '',
-			'field_repeater' => 'mp_stacks_forms_fields'
+			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
 		),
 		array(
 			'field_id'			=> 'field_title',
@@ -110,6 +134,7 @@ function mp_stacks_forms_create_meta_box(){
 			'field_type' 	=> 'textbox',
 			'field_value' => '',
 			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
 		),
 		array(
 			'field_id'			=> 'field_description',
@@ -118,14 +143,7 @@ function mp_stacks_forms_create_meta_box(){
 			'field_type' 	=> 'textbox',
 			'field_value' => '',
 			'field_repeater' => 'mp_stacks_forms_fields',
-		),
-		array(
-			'field_id'			=> 'field_placeholder',
-			'field_title' 	=> __( 'Field Placeholder Text', 'mp_stacks_forms'),
-			'field_description' 	=> __( 'If you want placeholder text to be displayed in this field before the user enters something, enter that here.', 'mp_stacks_forms' ),
-			'field_type' 	=> 'textbox',
-			'field_value' => '',
-			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
 		),
 		array(
 			'field_id'			=> 'field_type',
@@ -143,34 +161,96 @@ function mp_stacks_forms_create_meta_box(){
 				'color' => __( 'Color Picker', 'mp_stacks_forms' ),
 				'checkbox' => __( 'Checkboxes', 'mp_stacks_forms' ),
 				'radio' => __( 'Radio Buttons', 'mp_stacks_forms' ),
+				'fileupload' => __( 'File Upload', 'mp_stacks_forms' ),
+				'taxonomy' => __( 'Category Selector', 'mp_stacks_forms' ),
 			),
 			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
+		),
+		array(
+			'field_id'			=> 'field_placeholder',
+			'field_title' 	=> __( 'Field Placeholder Text', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'If you want placeholder text to be displayed in this field before the user enters something, enter that here.', 'mp_stacks_forms' ),
+			'field_type' 	=> 'textbox',
+			'field_value' => '',
+			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
+			'field_conditional_id' => 'field_type',
+			'field_conditional_values' => array('textbox', 'textarea', 'email', 'date', 'url', 'color'),
+		),
+		array(
+			'field_id'			=> 'field_taxonomy',
+			'field_title' 	=> __( 'Which Taxonomy?', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'Category Types are called "Taxonomies". From which Taxonomy should the user select their categories?', 'mp_stacks_forms' ),
+			'field_type' 	=> 'select',
+			'field_select_values' => get_taxonomies(),
+			'field_value' => '',
+			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
+			'field_conditional_id' => 'field_type',
+			'field_conditional_values' => array('taxonomy'),
+		),
+		array(
+			'field_id'			=> 'field_select_values',
+			'field_title' 	=> __( 'Field Selection Options', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'Enter the options people can choose from in the dropdown, checkboxes, or radio button - separated by commas (EG: Option 1, Option1, Option 3)', 'mp_stacks_forms' ),
+			'field_type' 	=> 'textarea',
+			'field_value' => '',
+			'field_placeholder' => __('Option 1, Option 2, Option 3', 'mp_stacks_forms' ),
+			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_conditional_id' => 'field_type',
+			'field_conditional_values' => array('select', 'radio', 'checkbox'),
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
 		),
 		array(
 			'field_id'			=> 'field_width',
 			'field_title' 	=> __( 'Field Width', 'mp_stacks_forms'),
-			'field_description' 	=> __( 'What percentage should the width of this field be? Default: 50%', 'mp_stacks_forms' ),
+			'field_description' 	=> __( 'What percentage should the width of this field be? Default: 50%. Tip: If you want this field to sit beside another field, make sure the 2 adjacent fields add up to 99% or less.', 'mp_stacks_forms' ),
 			'field_type' 	=> 'input_range',
 			'field_value' => '50',
 			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
 		),
 		array(
-			'field_id'			=> 'field_select_values',
-			'field_title' 	=> __( 'Dropdown Field Options', 'mp_stacks_forms'),
-			'field_description' 	=> __( 'Enter the options people can choose from in the dropdown - separated by commas (EG: Option 1, Option1, Option 3)', 'mp_stacks_forms' ),
-			'field_type' 	=> 'textarea',
-			'field_value' => '',
-			'field_placeholder' => __('Option 1, Option 2, Option 3', 'mp_stacks_forms' ),
+			'field_id'			=> 'field_placement',
+			'field_title' 	=> __( 'Field Placement', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'Should this field sit side-by-side with other side-by-side fields?', 'mp_stacks_forms' ),
+			'field_type' 	=> 'select',
+			'field_value' => 'table',
+			'field_select_values' => array( 
+				'table' => __( 'No other fields beside.', 'mp_stacks_forms' ), 
+				'inline-block' => __( 'Side-by-side (if adjacent fields are set to side-by-side as well)', 'mp_stacks_forms' ), 
+			),
 			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
 		),
 		array(
-			'field_id'			=> 'field_post_meta',
-			'field_title' 	=> __( 'Post Meta Slug', 'mp_stacks_forms'),
-			'field_description' 	=> __( 'Enter the Post Meta Slug this value will be saved to upon submit.', 'mp_stacks_forms' ),
-			'field_type' 	=> 'textarea',
+			'field_id'			=> 'field_meta_key',
+			'field_title' 	=> __( 'Field Meta Key (Optional)', 'mp_stacks_forms'),
+			'field_description' 	=> __( 'If this form is being used to create a WordPress post, enter the EXACT meta key slug this field will be saved as (or select an option from the dropdown).', 'mp_stacks_forms' ),
+			'field_type' 	=> 'datalist',
 			'field_value' => '',
-			'field_placeholder' => __('Option 1, Option 2, Option 3', 'mp_stacks_forms' ),
+			'field_select_values' => array( 
+				'post_title' => 'post_title', 
+				'post_date' => 'post_date', 
+				'post_content' => 'post_content', 
+				'featured_image' => 'featured_image'
+			),
 			'field_repeater' => 'mp_stacks_forms_fields',
+			'field_showhider' => 'mp_stacks_forms_fields_showhider',
+			'field_conditional_id' => 'field_type',
+			'field_conditional_values' => array(
+				'textbox',
+				'textarea',
+				'email',
+				'date',
+				'url',
+				'select',
+				'color',
+				'checkbox',
+				'radio',
+				'fileupload',
+			),
 		),
 		array(
 			'field_id'			=> 'mp_stacks_forms_submit_button_showhider',
@@ -179,15 +259,167 @@ function mp_stacks_forms_create_meta_box(){
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),
+			array(
+				'field_id'			=> 'mp_stacks_forms_submit_button_text',
+				'field_title' 	=> __( 'Submit Button Text', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'What should the submit button say? Default "Submit"', 'mp_stacks_forms' ),
+				'field_type' 	=> 'textbox',
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_submit_button_showhider'
+			),
+			array(
+				'field_id'			=> 'mp_stacks_forms_submit_button_text_color',
+				'field_title' 	=> __( 'Submit Button Text Color', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'What color should the text on submit button be?', 'mp_stacks_forms' ),
+				'field_type' 	=> 'colorpicker',
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_submit_button_showhider'
+			),
+			array(
+				'field_id'			=> 'mp_stacks_forms_submit_button_background_color',
+				'field_title' 	=> __( 'Submit Button Background Color', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'What color should the background of the submit button be?', 'mp_stacks_forms' ),
+				'field_type' 	=> 'colorpicker',
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_submit_button_showhider'
+			),
+			array(
+				'field_id'			=> 'mp_stacks_forms_submit_button_hover_text_color',
+				'field_title' 	=> __( 'Mouse Over: Submit Button Text Color', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'What color should the text on submit button be when the mouse is over it?', 'mp_stacks_forms' ),
+				'field_type' 	=> 'colorpicker',
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_submit_button_showhider'
+			),
+			array(
+				'field_id'			=> 'mp_stacks_forms_submit_button_hover_background_color',
+				'field_title' 	=> __( 'Mouse Over: Submit Button Background Color', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'What color should the background of the submit button be?', 'mp_stacks_forms' ),
+				'field_type' 	=> 'colorpicker',
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_submit_button_showhider'
+			),
 		array(
-			'field_id'			=> 'mp_stacks_forms_submit_button_showhider',
-			'field_title' 	=> __( 'Submit Button Text', 'mp_stacks_forms'),
-			'field_description' 	=> __( 'What should the submit button say? Default "Submit"', 'mp_stacks_forms' ),
+			'field_id'			=> 'mp_stacks_forms_security_showhider',
+			'field_title' 	=> __( 'Form Security', 'mp_stacks_forms'),
+			'field_description' 	=> '',
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
-			'field_showhider' => 'mp_stacks_forms_submit_button_showhider'
+		),	
+			array(
+				'field_id'			=> 'mp_stacks_forms_recaptcha',
+				'field_title' 	=> __( 'Secure this form with Google reCaptcha?', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'If you\'d like to prevent spam using Google\'s Free reCaptcha Service, check this option.', 'mp_stacks_forms' ),
+				'field_type' 	=> 'checkbox',
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_security_showhider'
+			),	
+			array(
+				'field_id'			=> 'mp_stacks_forms_recaptcha_site_key',
+				'field_title' 	=> __( 'Google reCaptcha Site Key', 'mp_stacks_forms'),
+				'field_description' 	=> '<a target="_blank" href="https://www.google.com/recaptcha/admin">' . __( 'Click Here to create/locate your recaptcha Site Key', 'mp_stacks_forms' ) . '</a>',
+				'field_type' 	=> 'textbox',
+				'field_value' => '',
+				'field_conditional_id' => 'mp_stacks_forms_recaptcha',
+				'field_conditional_values' => array('mp_stacks_forms_recaptcha'),
+				'field_showhider' => 'mp_stacks_forms_security_showhider'
+			),	
+			array(
+				'field_id'			=> 'mp_stacks_forms_recaptcha_secret_key',
+				'field_title' 	=> __( 'Google reCaptcha Secret Key', 'mp_stacks_forms'),
+				'field_description' 	=> '<a target="_blank" href="https://www.google.com/recaptcha/admin">' . __( 'Click Here to create/locate your recaptcha Secret Key', 'mp_stacks_forms' ) . '</a>',
+				'field_type' 	=> 'textbox',
+				'field_value' => '',
+				'field_conditional_id' => 'mp_stacks_forms_recaptcha',
+				'field_conditional_values' => array('mp_stacks_forms_recaptcha'),
+				'field_showhider' => 'mp_stacks_forms_security_showhider'
+			),	
+		array(
+			'field_id'			=> 'mp_stacks_forms_submission_actions_showhider',
+			'field_title' 	=> __( '"Form Submission Actions', 'mp_stacks_forms'),
+			'field_description' 	=> '',
+			'field_type' 	=> 'showhider',
+			'field_value' => '',
 		),
-	
+		
+			array(
+				'field_id'			=> 'mp_stacks_forms_action',
+				'field_title' 	=> __( 'Form Submission Action', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'Select an action that should take place when this form is submitted.', 'mp_stacks_forms' ),
+				'field_type' 	=> 'select',
+				'field_select_values' => array( 
+					'email' => __( 'Send an email containing the form data', 'mp_stacks_forms' ),
+					'create_wp_post' => __( 'Create a Wordpress Post using the form data.', 'mp_stacks_forms' ),
+				),
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_submission_actions_showhider',
+				'field_repeater' => 'mp_stacks_forms_submission_actions'
+			),
+			array(
+				'field_id'			=> 'mp_stacks_forms_emails',
+				'field_title' 	=> __( '"Submit To" emails.', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'Enter the email addresses this form should be sent to when submitted. For multiple, separate with Commas.', 'mp_stacks_forms' ),
+				'field_type' 	=> 'textarea',
+				'field_placeholder' => __( 'email1@email.com, email2@email.com, email3@email.com' ),
+				'field_value' => '',
+				'field_showhider' => 'mp_stacks_forms_submission_actions_showhider',
+				'field_conditional_id' => 'mp_stacks_forms_action',
+				'field_conditional_values' => array('email'),
+				'field_repeater' => 'mp_stacks_forms_submission_actions'
+			),
+			array(
+				'field_id'			=> 'email_subject_line',
+				'field_title' 	=> __( 'Email Subject Line', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'When the email is sent with the form data, what should the subject line be?', 'mp_stacks_forms' ),
+				'field_type' 	=> 'textbox',
+				'field_value' => __('Form submitted from', 'mp_stacks_forms') . ' ' . get_bloginfo( 'wpurl' ),
+				'field_showhider' => 'mp_stacks_forms_submission_actions_showhider',
+				'field_conditional_id' => 'mp_stacks_forms_action',
+				'field_conditional_values' => array('email'),
+				'field_repeater' => 'mp_stacks_forms_submission_actions'
+			),
+			array(
+				'field_id'			=> 'wppost_post_type',
+				'field_title' 	=> __( 'Select Post Type to create upon form submission:', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'Select the post type you\'d like to have created when this form is submitted:', 'mp_stacks_forms' ),
+				'field_type' 	=> 'select',
+				'field_value' => '',
+				'field_select_values' => $post_types_array,
+				'field_showhider' => 'mp_stacks_forms_submission_actions_showhider',
+				'field_conditional_id' => 'mp_stacks_forms_action',
+				'field_conditional_values' => array('create_wp_post'),
+				'field_repeater' => 'mp_stacks_forms_submission_actions'
+			),
+			array(
+				'field_id'			=> 'wppost_post_status',
+				'field_title' 	=> __( 'WP Post Status:', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'What should the post status of the new post be?', 'mp_stacks_forms' ),
+				'field_type' 	=> 'select',
+				'field_value' => '',
+				'field_select_values' => array( 
+					'draft' => __( 'Draft', 'mp_stacks_forms' ),
+					'publish' => __( 'Published (Be careful. This will make user-submitted posts live.)', 'mp_stacks_forms' ),
+				),
+				'field_showhider' => 'mp_stacks_forms_submission_actions_showhider',
+				'field_conditional_id' => 'mp_stacks_forms_action',
+				'field_conditional_values' => array('create_wp_post'),
+				'field_repeater' => 'mp_stacks_forms_submission_actions'
+			),	
+		array(
+			'field_id'			=> 'mp_stacks_forms_submission_messages',
+			'field_title' 	=> __( 'Form Submission Message', 'mp_stacks_forms'),
+			'field_description' 	=> '',
+			'field_type' 	=> 'showhider',
+			'field_value' => '',
+		),	
+			array(
+				'field_id'			=> 'mp_stacks_forms_submission_success_message',
+				'field_title' 	=> __( 'Success Message', 'mp_stacks_forms'),
+				'field_description' 	=> __( 'When the form is successfully submitted, what should the user read?', 'mp_stacks_forms' ),
+				'field_type' 	=> 'textarea',
+				'field_value' => __( 'Thanks for your entry. The form was successfully submitted!', 'mp_stacks_forms' ),
+				'field_showhider' => 'mp_stacks_forms_submission_messages',
+			),		
 	);
 	
 	

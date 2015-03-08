@@ -35,72 +35,40 @@ function mp_stacks_brick_content_output_css_forms( $css_output, $post_id, $first
 	
 	//Spacing between fields
 	$spacing = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_field_spacing', 20 );
+	
+	//Submit Button Styles
+	$mp_stacks_forms_submit_button_text_color = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submit_button_text_color' );
+	$mp_stacks_forms_submit_button_background_color = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submit_button_background_color' );
+	$mp_stacks_forms_submit_button_hover_text_color = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submit_button_hover_text_color' );
+	$mp_stacks_forms_submit_button_hover_background_color = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submit_button_hover_background_color' );
+	
+	//Text alignment
+	$mp_stacks_forms_field_text_alignment = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_field_text_alignment', 'left' );
 		
 	//CSS for the forms.
 	$css_forms_output = 
 	'#mp-stacks-forms-container-' . $post_id . ' .mp-stacks-form-field{' . 
-		mp_core_css_line( 'margin-bottom', $spacing, 'px' ) . 	
+		mp_core_css_line( 'margin-bottom', $spacing, 'px' ) . 
+		mp_core_css_line( 'text-align', $mp_stacks_forms_field_text_alignment ) . 			
 	'}
-	#mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-field-label{' . 
+	#mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-field-title,
+	#mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-message{' . 
 		mp_core_css_line( 'font-size', $title_font_size, 'px' ) . 
 		mp_core_css_line( 'color', $title_color ) . 
-	'} #mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-field-description{' . 
+	'} #mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-field-description, #mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-field-fileupload{' . 
 		mp_core_css_line( 'font-size', $description_font_size, 'px' ) . 
-		mp_core_css_line( 'color', $description_color ) . '}';
+		mp_core_css_line( 'color', $description_color ) . 
+	'}
+	#mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-submit-btn{' .
+		mp_core_css_line( 'color', $mp_stacks_forms_submit_button_text_color ) . 
+		mp_core_css_line( 'background-color', $mp_stacks_forms_submit_button_background_color ) . 
+	'}
+	#mp-stacks-forms-container-' . $post_id . ' .mp-stacks-forms-submit-btn:hover{' .
+		mp_core_css_line( 'color', $mp_stacks_forms_submit_button_hover_text_color ) . 
+		mp_core_css_line( 'background-color', $mp_stacks_forms_submit_button_hover_background_color ) . 
+	'}';
 	
 	return $css_forms_output . $css_output;
 		
 }
 add_filter('mp_brick_additional_css', 'mp_stacks_brick_content_output_css_forms', 10, 4);
-
-/**
- * Default CSS for MP Stacks Forms. We do it this way so that we don't need to Enqueue another CSS stylesheet - killing the speed of the page.
- *
- * @access   public
- * @since    1.0.0
- * @return   void
- */
-function mp_stacks_forms_default_css(){
-	
-	echo '<style type="text/css">';
-		
-		//Styles for the UL containing the fields
-		echo '.mp-stacks-form-fields{';
-			echo 'list-style:none;';
-			echo 'margin:0px;';
-		echo '}';
-		
-		//Color Picker Input Styles
-		echo '.mp-stacks-forms-field-color{';
-			echo 'padding:0px;';
-		echo '}'; 
-		
-		//Checkbox Input Styles
-		echo '.mp-stacks-forms-checkbox-container .mp-stacks-forms-field-description{';
-			echo 'display:inline;';
-			echo 'margin-left:5px;';
-		echo '}';
-		echo '.mp-stacks-forms-field-checkbox{';
-			echo 'width:inherit!important;';
-			echo 'display:inline-block';
-		echo '}'; 
-		
-		//Radio Input Styles
-		echo '.mp-stacks-forms-radio-container .mp-stacks-forms-field-description{';
-			echo 'display:inline;';
-			echo 'margin-left:5px;';
-		echo '}';
-		echo '.mp-stacks-forms-field-radio{';
-			echo 'width:inherit!important;';
-			echo 'display:inline-block';
-		echo '}'; 
-		
-		//Override any user set margins on the last field in the form
-		echo '.mp-stacks-form-field:last-child{';
-			echo 'margin-bottom:0px!important;';
-		echo '}';
-		
-	echo '</style>';
-	
-}
-add_action( 'wp_enqueue_scripts', 'mp_stacks_forms_default_css' );

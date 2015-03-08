@@ -34,7 +34,7 @@ License: GPL2
 */
 // Plugin version
 if( !defined( 'MP_STACKS_FORMS_VERSION' ) )
-	define( 'MP_STACKS_FORMS_VERSION', '1.0.0.1' );
+	define( 'MP_STACKS_FORMS_VERSION', '1.0.0.0' );
 
 // Plugin Folder URL
 if( !defined( 'MP_STACKS_FORMS_PLUGIN_URL' ) )
@@ -145,15 +145,24 @@ function mp_stacks_forms_include_files(){
 		require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/misc-functions/content-filters-html.php' );
 		
 		/**
+		 * Form submission function
+		 */
+		require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/misc-functions/form-submission.php' );
+		
+		/**
 		 * Metabox for forms
 		 */
 		require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/metaboxes/mp-stacks-forms-meta/mp-stacks-forms-meta.php' );
 		
 		/**
-		 * Functions which assist with the creation of templates using this add-on
+		 * Add this add on to the list of Active MP Stacks Add Ons
 		 */
 		if ( function_exists('mp_stacks_developer_textdomain') ){
-			require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/misc-functions/stack-template-functions.php' );
+			function mp_stacks_forms_add_active( $required_add_ons ){
+				$required_add_ons['mp_stacks_forms'] = 'MP Stacks + Forms';
+				return $required_add_ons;
+			}
+			add_filter( 'mp_stacks_active_add_ons', 'mp_stacks_forms_add_active' );
 		}
 		
 		/**
@@ -165,7 +174,7 @@ function mp_stacks_forms_include_files(){
 		 * Misc Functions 
 		 */
 		require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/misc-functions/misc-functions.php' );
-				
+						
 	}
 }
 add_action('plugins_loaded', 'mp_stacks_forms_include_files', 9);

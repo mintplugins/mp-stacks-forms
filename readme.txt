@@ -4,15 +4,15 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 1.0.0.1
+Stable tag: 1.0.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Show an image/video forms on any page, at any time, anywhere on your website. Just put make a brick using “MP Stacks”, put the stack on a page, and set the brick’s Content-Type to be “Forms”.
+Put a completely customized form on any page. The form can be set up as a contact email form, or even be used to create WordPress posts for front-end user submission.
 
 == Description ==
 
-Show an image/video forms on any page, at any time, anywhere on your website. Just put make a brick using “MP Stacks”, put the stack on a page, and set the brick’s Content-Type to be “Forms”.
+Put a completely customized form on any page. The form can be set up as a contact email form, or even be used to create WordPress posts for front-end user submission.
 
 == Installation ==
 
@@ -33,9 +33,5 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
-= 1.0.0.1 = July 24, 2014
-* Fixed utility code page for mp-stacks-developer from “Image Forms” to just “Forms”
-* Better CSS positioning for navigation dots
-
-= 1.0.0.0 = June 7, 2014
+= 1.0.0.0 = March 8, 2015
 * Original release
