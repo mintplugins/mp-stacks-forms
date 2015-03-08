@@ -21,6 +21,27 @@
  * @return   void
  */
 function mp_stacks_forms_processs_form( $post_id ){
+		
+	//Check if the user has hit the max submissions for the day
+	if ( mp_stacks_forms_max_submissions_per_day( $post_id ) ){
+		
+		//Get the message we want to show them for this situation
+		$max_submissions_message = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_max_submissions_message', __( 'You have reached the maximum number of submissions for today. Try again in 24 hours.', 'mp_stacks_forms' )  );
+		
+		//Return with that error message
+		return array( 'error' => $max_submissions_message );	
+		
+	}
+	
+	//Check if the required delay between post submissions has NOT yet been hit by this user - they need to wait longer.
+	if ( !mp_stacks_forms_submission_delay_reached( $post_id ) ){
+		
+		//Get the message we want to show for this situation
+		$delay_not_reached_message = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submission_delay_message', __( 'You must wait 20 seconds between submissions.', 'mp_stacks_forms' )  );
+		
+		//Return with that error message
+		return array( 'error' => $delay_not_reached_message );	
+	}
 	
 	//Check if we should do google recaptcha
 	$use_recaptcha = mp_core_get_post_meta_checkbox( $post_id, 'mp_stacks_forms_recaptcha', false );
@@ -69,7 +90,11 @@ function mp_stacks_forms_processs_form( $post_id ){
 	
 	//If no submission actions have been set, get out of here.
 	if ( empty( $mp_stacks_forms_submission_actions ) || !is_array( $mp_stacks_forms_submission_actions ) ){
-		return array( 'error' => __( 'No submission actions have been set up', 'mp_stacks_forms' ) );	
+		
+		//Get the message we want to show the user when the form is successfully submitted
+		$success_message = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submission_success_message', __( 'Thanks for your entry. The form was successfully submitted!', 'mp_stacks_forms' ) );
+		return array( 'success' => $success_message );
+	
 	}
 	
 	//First lets handle any file uploads. Here, we loop through any file uploads.
@@ -202,6 +227,8 @@ function mp_stacks_forms_processs_form( $post_id ){
 					
 				}
 			}
+			
+			$body .= "\r\n\r\n" . __( 'This form was submitted from this IP address', 'mp_stacks_forms' ) .': '. $_SESSION['users_ip'];
 								
 			//Send the form to each email address.
 			wp_mail( $mp_stacks_forms_emails, $mp_stacks_forms_submission_actions['email_subject_line'] , $body );
@@ -380,4 +407,64 @@ function mp_stacks_forms_sanitize_form_value( $value ){
 	
 	return $value;
 							
+}
+
+/**
+ * Check if this user has submitted the form the max number of times for the day
+ *
+ * @since    1.0.0
+ * @link     http://mintplugins.com/doc/
+ * @param    string $postid The post_id of the brick where the form was built.
+ * @return   bool True if they have hit their limit - false if they can still submit more.
+ */
+function mp_stacks_forms_max_submissions_per_day( $post_id ){
+	//Get the user's IP address
+	$user_ip = $_SERVER['REMOTE_ADDR'];
+	
+	//Get the number of times this form has been submitted from this IP in the last 24 hours
+	$mp_stacks_forms_user_transient = get_transient( 'mp_stacks_forms_' . sanitize_title( $user_ip ) );
+	$mp_stacks_forms_user_transient = empty( $mp_stacks_forms_user_transient ) ? 1 : $mp_stacks_forms_user_transient;
+	
+	//Get the maximum number of times this form can be submitted by a single user in a day
+	$max_submissions_per_day = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_max_submissions_per_day', 10 );
+	
+	//If the user has hit the max number of submissions for the day
+	if ( $mp_stacks_forms_user_transient > $max_submissions_per_day ){
+		
+		return true;
+	}
+	
+	//Add "1" to the number of times this form was submitted from this IP address - and make it expire in 24 hours
+	set_transient( 'mp_stacks_forms_' . sanitize_title( $user_ip ), $mp_stacks_forms_user_transient + 1, 86400 );
+	
+	return false;
+}
+
+/**
+ * Check if the minimum delay has been reached between form submissions for this user
+ *
+ * @since    1.0.0
+ * @link     http://mintplugins.com/doc/
+ * @param    string $postid The post_id of the brick where the form was built.
+ * @return   bool True if they have waited long enough - false if they still need to wait.
+ */
+function mp_stacks_forms_submission_delay_reached( $post_id ){
+	
+	if( !session_id() )
+        session_start();
+		
+	//Get the delay the user has set for this form (defaults to 20 seconds)
+	$submission_delay = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submission_delay', 20 );
+	
+	if ( isset( $_SESSION['time_of_last_submission'] ) ){
+		
+		//If X Seconds haven't passed since this user last submitted this form
+		if ( time() < ( $_SESSION['time_of_last_submission'] + $submission_delay ) ){
+			return false;
+		}
+	}
+		
+	$_SESSION['time_of_last_submission'] = time();	
+	
+	return true;
 }

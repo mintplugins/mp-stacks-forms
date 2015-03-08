@@ -306,34 +306,92 @@ function mp_stacks_forms_create_meta_box(){
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),	
+			
 			array(
-				'field_id'			=> 'mp_stacks_forms_recaptcha',
-				'field_title' 	=> __( 'Secure this form with Google reCaptcha?', 'mp_stacks_forms'),
-				'field_description' 	=> __( 'If you\'d like to prevent spam using Google\'s Free reCaptcha Service, check this option.', 'mp_stacks_forms' ),
-				'field_type' 	=> 'checkbox',
+				'field_id'			=> 'mp_stacks_forms_google_recaptcha_showhider',
+				'field_title' 	=> __( 'Google reCaptcha', 'mp_stacks_forms'),
+				'field_description' 	=> '',
+				'field_type' 	=> 'showhider',
 				'field_value' => '',
 				'field_showhider' => 'mp_stacks_forms_security_showhider'
 			),	
+				array(
+					'field_id'			=> 'mp_stacks_forms_recaptcha',
+					'field_title' 	=> __( 'Secure this form with Google reCaptcha?', 'mp_stacks_forms'),
+					'field_description' 	=> __( 'If you\'d like to prevent spam using Google\'s Free reCaptcha Service, check this option.', 'mp_stacks_forms' ),
+					'field_type' 	=> 'checkbox',
+					'field_value' => '',
+					'field_showhider' => 'mp_stacks_forms_google_recaptcha_showhider'
+				),	
+				array(
+					'field_id'			=> 'mp_stacks_forms_recaptcha_site_key',
+					'field_title' 	=> __( 'Google reCaptcha Site Key', 'mp_stacks_forms'),
+					'field_description' 	=> '<a target="_blank" href="https://www.google.com/recaptcha/admin">' . __( 'Click Here to create/locate your recaptcha Site Key', 'mp_stacks_forms' ) . '</a>',
+					'field_type' 	=> 'textbox',
+					'field_value' => '',
+					'field_conditional_id' => 'mp_stacks_forms_recaptcha',
+					'field_conditional_values' => array('mp_stacks_forms_recaptcha'),
+					'field_showhider' => 'mp_stacks_forms_google_recaptcha_showhider'
+				),	
+				array(
+					'field_id'			=> 'mp_stacks_forms_recaptcha_secret_key',
+					'field_title' 	=> __( 'Google reCaptcha Secret Key', 'mp_stacks_forms'),
+					'field_description' 	=> '<a target="_blank" href="https://www.google.com/recaptcha/admin">' . __( 'Click Here to create/locate your recaptcha Secret Key', 'mp_stacks_forms' ) . '</a>',
+					'field_type' 	=> 'textbox',
+					'field_value' => '',
+					'field_conditional_id' => 'mp_stacks_forms_recaptcha',
+					'field_conditional_values' => array('mp_stacks_forms_recaptcha'),
+					'field_showhider' => 'mp_stacks_forms_google_recaptcha_showhider'
+				),
 			array(
-				'field_id'			=> 'mp_stacks_forms_recaptcha_site_key',
-				'field_title' 	=> __( 'Google reCaptcha Site Key', 'mp_stacks_forms'),
-				'field_description' 	=> '<a target="_blank" href="https://www.google.com/recaptcha/admin">' . __( 'Click Here to create/locate your recaptcha Site Key', 'mp_stacks_forms' ) . '</a>',
-				'field_type' 	=> 'textbox',
+				'field_id'			=> 'mp_stacks_forms_delay_showhider',
+				'field_title' 	=> __( 'Submission Delay', 'mp_stacks_forms'),
+				'field_description' 	=> '',
+				'field_type' 	=> 'showhider',
 				'field_value' => '',
-				'field_conditional_id' => 'mp_stacks_forms_recaptcha',
-				'field_conditional_values' => array('mp_stacks_forms_recaptcha'),
 				'field_showhider' => 'mp_stacks_forms_security_showhider'
-			),	
+			),
+				array(
+					'field_id'			=> 'mp_stacks_forms_submission_delay',
+					'field_title' 	=> __( 'Submission Delay', 'mp_stacks_forms'),
+					'field_description' 	=> __( 'Set the minimum number of seconds that must pass between form submissions by a single user.', 'mp_stacks_forms' ),
+					'field_type' 	=> 'number',
+					'field_value' => '20',
+					'field_showhider' => 'mp_stacks_forms_delay_showhider'
+				),
+				array(
+					'field_id'			=> 'mp_stacks_forms_submission_delay_message',
+					'field_title' 	=> __( 'Message if the user hasn\'t waited long enough before submitting again.', 'mp_stacks_forms'),
+					'field_description' 	=> __( 'What should the user read if they haven\'t waited long enough between submissions?', 'mp_stacks_forms' ),
+					'field_type' 	=> 'textarea',
+					'field_value' => __( 'You must wait 20 seconds between submissions.', 'mp_stacks_forms' ),
+					'field_showhider' => 'mp_stacks_forms_delay_showhider'
+				),
 			array(
-				'field_id'			=> 'mp_stacks_forms_recaptcha_secret_key',
-				'field_title' 	=> __( 'Google reCaptcha Secret Key', 'mp_stacks_forms'),
-				'field_description' 	=> '<a target="_blank" href="https://www.google.com/recaptcha/admin">' . __( 'Click Here to create/locate your recaptcha Secret Key', 'mp_stacks_forms' ) . '</a>',
-				'field_type' 	=> 'textbox',
+				'field_id'			=> 'mp_stacks_forms_max_subs_per_day_showhider',
+				'field_title' 	=> __( 'Max Submissions Per Day', 'mp_stacks_forms'),
+				'field_description' 	=> '',
+				'field_type' 	=> 'showhider',
 				'field_value' => '',
-				'field_conditional_id' => 'mp_stacks_forms_recaptcha',
-				'field_conditional_values' => array('mp_stacks_forms_recaptcha'),
 				'field_showhider' => 'mp_stacks_forms_security_showhider'
-			),	
+			),
+				array(
+					'field_id'			=> 'mp_stacks_forms_max_submissions_per_day',
+					'field_title' 	=> __( 'Maximum Submissions Per Day', 'mp_stacks_forms'),
+					'field_description' 	=> __( 'How many times can a single user submit the form every 24 hours?', 'mp_stacks_forms' ),
+					'field_type' 	=> 'number',
+					'field_value' => '10',
+					'field_showhider' => 'mp_stacks_forms_max_subs_per_day_showhider'
+				),
+				array(
+					'field_id'			=> 'mp_stacks_forms_max_submissions_message',
+					'field_title' 	=> __( 'Message for Maximum Submissions Per Day', 'mp_stacks_forms'),
+					'field_description' 	=> __( 'What should the user read when they reach the maximum number of submissions for the day?', 'mp_stacks_forms' ),
+					'field_type' 	=> 'textarea',
+					'field_value' => __( 'You have reached the maximum number of submissions for today. Try again in 24 hours.', 'mp_stacks_forms' ),
+					'field_showhider' => 'mp_stacks_forms_max_subs_per_day_showhider'
+				),
+				
 		array(
 			'field_id'			=> 'mp_stacks_forms_submission_actions_showhider',
 			'field_title' 	=> __( '"Form Submission Actions', 'mp_stacks_forms'),
