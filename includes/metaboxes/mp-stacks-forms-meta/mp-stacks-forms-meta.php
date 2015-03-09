@@ -44,14 +44,6 @@ function mp_stacks_forms_create_meta_box(){
 	 */
 	$mp_stacks_forms_items_array = array(
 		array(
-			'field_id'			=> 'mp_stacks_forms_email',
-			'field_title' 	=> __( 'Email Address:', 'mp_stacks_forms'),
-			'field_description' 	=> __( 'When this form is submitted, which email should it send to?', 'mp_stacks_forms' ),
-			'field_type' 	=> 'textbox',
-			'field_value' => '20',
-			'field_placeholder' => __('Email Address', 'mp_stacks_forms' ),
-		),
-		array(
 			'field_id'			=> 'mp_stacks_form_style_settings',
 			'field_title' 	=> __( 'Form Style Settings:', 'mp_stacks_forms'),
 			'field_description' 	=> __( '', 'mp_stacks_forms' ),
