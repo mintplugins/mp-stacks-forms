@@ -3,7 +3,7 @@
 Plugin Name: MP Stacks + Forms
 Plugin URI: http://mintplugins.com/plugins/mp-stacks-forms
 Description: Content-Type Add-On for MP Stacks which creates contact forms in a brick.
-Version: 1.0.0.1
+Version: 1.0.0.2
 Author: Mint Plugins
 Author URI: http://mintplugins.com
 Text Domain: mp_stacks_forms
@@ -34,7 +34,7 @@ License: GPL2
 */
 // Plugin version
 if( !defined( 'MP_STACKS_FORMS_VERSION' ) )
-	define( 'MP_STACKS_FORMS_VERSION', '1.0.0.1' );
+	define( 'MP_STACKS_FORMS_VERSION', '1.0.0.2' );
 
 // Plugin Folder URL
 if( !defined( 'MP_STACKS_FORMS_PLUGIN_URL' ) )
@@ -90,6 +90,11 @@ function mp_stacks_forms_textdomain() {
 
 }
 add_action( 'init', 'mp_stacks_forms_textdomain', 1 );
+
+/**
+ * Activation Hook Function - Sets up Rewrite Rules etc
+ */
+require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/misc-functions/install.php' );
 
 /*
 |--------------------------------------------------------------------------
