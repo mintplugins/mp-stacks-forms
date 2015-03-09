@@ -34,7 +34,7 @@ License: GPL2
 */
 // Plugin version
 if( !defined( 'MP_STACKS_FORMS_VERSION' ) )
-	define( 'MP_STACKS_FORMS_VERSION', '1.0.0.0' );
+	define( 'MP_STACKS_FORMS_VERSION', '1.0.0.1' );
 
 // Plugin Folder URL
 if( !defined( 'MP_STACKS_FORMS_PLUGIN_URL' ) )
