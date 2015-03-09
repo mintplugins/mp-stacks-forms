@@ -33,8 +33,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
-= 1.0.0.1 = March 8, 2015
+= 1.0.0.1 = March 9, 2015
 * Added security options for max submissions per day and  submission delay.
+* Removed unneeded email field as it moved to a repeater
 
 = 1.0.0.0 = March 8, 2015
 * Original release
