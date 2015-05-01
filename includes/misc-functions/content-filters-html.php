@@ -35,8 +35,12 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
 		//If there were errors in submitting the form
 		if ( isset( $form_response['error'] ) ){
 			
-			return '<div id="mp-stacks-forms-container-' . $post_id .'" class="mp-stacks-forms-container"><div class="mp-stacks-forms-message">' . $form_response['error'] . '</div></div>';
-				
+			if ( is_array( $form_response['error'] ) ){
+				print_r($form_response['error']);
+			}
+			else{			
+				return '<div id="mp-stacks-forms-container-' . $post_id .'" class="mp-stacks-forms-container"><div class="mp-stacks-forms-message">' . $form_response['error'] . '</div></div>';
+			}
 		}
 		//If the form was successfully submitted
 		else{

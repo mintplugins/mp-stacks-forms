@@ -228,7 +228,7 @@ function mp_stacks_forms_processs_form( $post_id ){
 				}
 			}
 			
-			$body .= "\r\n\r\n" . __( 'This form was submitted from this IP address', 'mp_stacks_forms' ) .': '. $_SESSION['users_ip'];
+			$body .= "\r\n\r\n" . __( 'This form was submitted from this IP address', 'mp_stacks_forms' ) .': '. $_SERVER['REMOTE_ADDR'];
 								
 			//Send the form to each email address.
 			wp_mail( $mp_stacks_forms_emails, $mp_stacks_forms_submission_actions['email_subject_line'] , $body );
