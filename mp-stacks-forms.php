@@ -141,7 +141,7 @@ function mp_stacks_forms_include_files(){
 		/**
 		 * enqueue scripts
 		 */
-		require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/misc-functions/enqueue-scripts.php' );
+		//require( MP_STACKS_FORMS_PLUGIN_DIR . 'includes/misc-functions/admin-enqueue-scripts.php' );
 		
 		/**
 		 * Media Filters for forms
