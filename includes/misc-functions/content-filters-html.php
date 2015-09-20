@@ -26,6 +26,9 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
 		return $default_content_output; 	
 	}
 	
+	//Enqueue frontend JS
+	wp_enqueue_script( 'mp_stacks_forms_js', plugins_url( 'js/mp-stacks-forms.js', dirname( __FILE__ ) ), array('jquery', 'mp_stacks_front_end_js'), MP_STACKS_FORMS_VERSION, true );
+	
 	//If the url contains the "mp_stacks_form" variable
 	if ( isset( $_GET['mp_stacks_form'] ) && $_GET['mp_stacks_form'] == 'submitted' ){
 		

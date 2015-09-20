@@ -25,6 +25,9 @@ function mp_stacks_brick_content_output_css_forms( $css_output, $post_id, $first
 		return $css_output;	
 	}
 	
+	//Enqueue forms CSS
+	wp_enqueue_style( 'mp_stacks_forms_css', plugins_url( 'css/mp-stacks-forms.css', dirname( __FILE__ ) ), MP_STACKS_FORMS_VERSION );
+	
 	//Title Styling
 	$title_font_size = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_field_titles_font_size', 20 );
 	$title_color = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_field_titles_font_color' );
