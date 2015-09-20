@@ -8,7 +8,7 @@
  * @package    MP Stacks Forms
  * @subpackage Functions
  *
- * @copyright   Copyright (c) 2014, Mint Plugins
+ * @copyright   Copyright (c) 2015, Mint Plugins
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author      Philip Johnston
  */
@@ -32,7 +32,8 @@ function mp_stacks_forms_create_meta_box(){
 		'metabox_title' => __( '"Forms" Content-Type', 'mp_stacks_forms'), 
 		'metabox_posttype' => 'mp_brick', 
 		'metabox_context' => 'advanced', 
-		'metabox_priority' => 'low' 
+		'metabox_priority' => 'low',
+		'metabox_content_via_ajax' => true,
 	);
 	
 	$post_types_array = mp_core_get_all_post_types();
@@ -493,4 +494,5 @@ function mp_stacks_forms_create_meta_box(){
 	global $mp_stacks_forms_meta_box;
 	$mp_stacks_forms_meta_box = new MP_CORE_Metabox($mp_stacks_forms_add_meta_box, $mp_stacks_forms_items_array);
 }
-add_action('mp_brick_metabox', 'mp_stacks_forms_create_meta_box');
+add_action('mp_brick_ajax_metabox', 'mp_stacks_forms_create_meta_box');
+add_action('wp_ajax_mp_stacks_forms_metabox_content', 'mp_stacks_forms_create_meta_box');
