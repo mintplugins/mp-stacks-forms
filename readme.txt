@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 3.8.1
-Stable tag: 1.0.0.3
+Tested up to: 4.3
+Stable tag: 1.0.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,12 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.4 = September 20, 2015
+* Brick Metabox controls now load using ajax.
+* Remove Un-needed Admin JS.
+* Admin Meta Scripts now enqueued only when needed.
+* Front End Scripts now enqueued only when needed.
 
 = 1.0.0.3 = May 1, 2015
 * Proper user IP and error checking for array
