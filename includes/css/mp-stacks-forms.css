@@ -40,10 +40,6 @@
 	margin-bottom:0px!important;
 }
 
-/*Set up styling for the google reCaptcha*/
-.mp-brick .g-recaptcha > div > div{ 
-	width:inherit!important; 
-}
 .mp-stacks-forms-hidden{
 	display:none;	
 }

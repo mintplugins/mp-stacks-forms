@@ -200,7 +200,7 @@ function mp_stacks_forms_create_meta_box(){
 			'field_title' 	=> __( 'Field Width', 'mp_stacks_forms'),
 			'field_description' 	=> __( 'What percentage should the width of this field be? Default: 50%. Tip: If you want this field to sit beside another field, make sure the 2 adjacent fields add up to 99% or less.', 'mp_stacks_forms' ),
 			'field_type' 	=> 'input_range',
-			'field_value' => '50',
+			'field_value' => '49',
 			'field_repeater' => 'mp_stacks_forms_fields',
 			'field_showhider' => 'mp_stacks_forms_fields_showhider',
 		),

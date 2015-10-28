@@ -79,7 +79,7 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
                         'field_title' => NULL,
                         'field_description' => NULL,
                         'field_type' => 'textbox',
-                        'field_width' => 50,
+                        'field_width' => 49,
                         'field_placeholder' => NULL,
                         'field_select_values' => NULL,
 						'field_placement' => 'table',
