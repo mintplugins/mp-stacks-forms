@@ -57,7 +57,7 @@ function mp_stacks_forms_processs_form( $post_id ){
 		}
 		
 		// Was there a reCAPTCHA response from the form?
-		if ( $_POST["g-recaptcha-response"] ) {
+		if ( isset( $_POST["g-recaptcha-response"] ) && $_POST["g-recaptcha-response"] ) {
 			$resp = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', array(
 				'method' => 'POST',
 				'timeout' => 45,
@@ -203,6 +203,11 @@ function mp_stacks_forms_processs_form( $post_id ){
 						
 						//Add this field's Title: Value to the body of the email
 						$body .= isset( $_POST[$key . '-field-title'] ) ? "\r\n \r\n" . mp_stacks_forms_sanitize_form_value( $_POST[$key . '-field-title'] ) . ": \r\n" . $value : NULL;
+						
+						//If this is an email field, add it to the Reply-To Field
+						if ( $_POST[$key . '-field-type'] == 'email' ){
+							$reply_to_emails[] = $value;
+						}
 					}
 				
 				}
@@ -229,9 +234,19 @@ function mp_stacks_forms_processs_form( $post_id ){
 			}
 			
 			$body .= "\r\n\r\n" . __( 'This form was submitted from this IP address', 'mp_stacks_forms' ) .': '. $_SERVER['REMOTE_ADDR'];
+			
+			//Loop through all emails in the form so we can se them for Reply-To
+			$reply_to_emails_string = NULL;
+			if ( isset( $reply_to_emails ) && is_array( $reply_to_emails ) ){
+				foreach( $reply_to_emails as $reply_to_email )	{
+					$reply_to_emails_string .= '<' . $reply_to_email . '> ,';
+				}
+			}
+			
+			$headers[] = 'Reply-To: ' . $reply_to_emails_string;
 								
 			//Send the form to each email address.
-			wp_mail( $mp_stacks_forms_emails, $mp_stacks_forms_submission_actions['email_subject_line'] , $body );
+			wp_mail( $mp_stacks_forms_emails, $mp_stacks_forms_submission_actions['email_subject_line'] , $body, $headers );
 								
 		}
 		//If this action is to create a WP Post
