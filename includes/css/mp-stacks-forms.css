@@ -41,5 +41,5 @@
 }
 
 .mp-stacks-forms-hidden{
-	display:none;	
+	display:none!important;	
 }
