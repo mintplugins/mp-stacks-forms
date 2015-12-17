@@ -159,7 +159,7 @@ function mp_stacks_forms_processs_form( $post_id ){
 		//If this action is to send an email continaing the form data
 		if ( $mp_stacks_forms_submission_actions['mp_stacks_forms_action'] == 'email' ){
 			
-			$body = __( 'The form located at', 'mp_stacks_forms' ) . ' ' . mp_core_get_current_url() . ' ' . __( 'has been submitted. Here is the data:', 'mp_stacks_forms' ) . "\r\n";
+			$body = NULL;
 									
 			//Formulate all the form data into a string we can send as an email
 			//Loop through each field in the form
@@ -233,8 +233,8 @@ function mp_stacks_forms_processs_form( $post_id ){
 				}
 			}
 			
-			$body .= "\r\n\r\n" . __( 'This form was submitted from this IP address', 'mp_stacks_forms' ) .': '. $_SERVER['REMOTE_ADDR'];
-			
+			$body .= "\r\n\r\n" . __( 'Submitted via ', 'mp_stacks_forms' ) . ' ' . str_replace( '?mp_stacks_form=submitted', '', mp_core_get_current_url() ) . ' | ' . $_SERVER['REMOTE_ADDR'] . "\r\n";
+						
 			//Loop through all emails in the form so we can se them for Reply-To
 			$reply_to_emails_string = NULL;
 			if ( isset( $reply_to_emails ) && is_array( $reply_to_emails ) ){
