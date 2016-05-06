@@ -108,7 +108,8 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
                                 $args = array(
                                     'field_placeholder' => $form_field['field_placeholder'],
                                     'field_select_values' => $form_field['field_select_values'],
-									'field_taxonomy' => $form_field['field_taxonomy']
+									'field_taxonomy' => $form_field['field_taxonomy'],
+									'field_required' => empty( $form_field['field_required'] ) ? NULL : 'required'
                                 );
                                 
                                 //Get the name of the function to show the right input field type
@@ -129,8 +130,11 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
 									echo '<input type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-tax" value="' . $form_field['field_taxonomy'] . '" />';
 								}
 								
-								//Output a hidden field which tells us the meta key to use when saving a new WP post.
-                                echo '<input type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-meta-key" value="' . $form_field['field_meta_key'] . '" />';
+								//If we are in mp_stacks_forms advances mode, handle file uploads.
+								if ( mp_stacks_forms_mode() == 'advanced' ){
+									//Output a hidden field which tells us the meta key to use when saving a new WP post.
+									echo '<input type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-meta-key" value="' . $form_field['field_meta_key'] . '" />';
+								}
                             }
                             ?>
                             
@@ -187,11 +191,12 @@ function mp_stacks_forms_textbox_field( $post_id, $field_counter, $args = array(
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="text" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-textbox" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  />';
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="text" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-textbox" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  ' . $args['field_required'] . ' />';
 	
 }
 
@@ -209,11 +214,12 @@ function mp_stacks_forms_textarea_field( $post_id, $field_counter, $args = array
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	return '<textarea name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" class=".mp-stacks-forms-field-textarea" tabindex="' . $field_counter . '" rows="10" cols="50"  placeholder="' . $args['field_placeholder'] . '"></textarea>';
+	return '<textarea name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" class=".mp-stacks-forms-field-textarea" tabindex="' . $field_counter . '" rows="10" cols="50"  placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' ></textarea>';
 	
 }
 
@@ -231,11 +237,12 @@ function mp_stacks_forms_email_field( $post_id, $field_counter, $args = array() 
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="email" value="' . $args['preset_value'] . '" class=" .mp-stacks-forms-field-email" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  />';
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="email" value="' . $args['preset_value'] . '" class=" .mp-stacks-forms-field-email" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' />';
 	
 }
 
@@ -253,11 +260,12 @@ function mp_stacks_forms_color_field( $post_id, $field_counter, $args = array() 
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="color" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-color" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  />';
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="color" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-color" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' />';
 	
 }
 
@@ -275,11 +283,12 @@ function mp_stacks_forms_date_field( $post_id, $field_counter, $args = array() )
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="date" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-date" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  />';
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="date" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-date" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' />';
 	
 }
 
@@ -297,11 +306,12 @@ function mp_stacks_forms_url_field( $post_id, $field_counter, $args = array() ){
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="url" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-url" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  />';
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="url" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-url" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' />';
 	
 }
 
@@ -320,15 +330,16 @@ function mp_stacks_forms_select_field( $post_id, $field_counter, $args = array()
 		'field_select_values' => array(),
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	$return_html = '<select name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-select" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  />';
+	$return_html = '<select name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-select" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' />';
 		
 		//Loop through each option in this dropdown
 		foreach ( $args['field_select_values'] as $field_select_value => $field_select_visual ){
-			$return_html .= '<option value="' . $field_select_value . '">' . $field_select_visual . '</option>';
+			$return_html .= '<option value="' . $field_select_visual . '">' . $field_select_visual . '</option>';
 		}
 	
 	$return_html .= '</select>';
@@ -352,6 +363,7 @@ function mp_stacks_forms_checkbox_field( $post_id, $field_counter, $args = array
 		'field_select_values' => array(),
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
@@ -364,7 +376,7 @@ function mp_stacks_forms_checkbox_field( $post_id, $field_counter, $args = array
 			
 			
 			$return_html .= '<div class="mp-stacks-forms-checkbox-container">';
-			$return_html .= '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '[]" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="checkbox" value="' . $field_select_value . '" class="mp-stacks-forms-field-checkbox" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ><div class="mp-stacks-forms-field-description">' . $field_select_value . '</div>';
+			$return_html .= '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '[]" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="checkbox" value="' . $field_select_value . '" class="mp-stacks-forms-field-checkbox" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' ><div class="mp-stacks-forms-field-description">' . $field_select_value . '</div>';
 			$return_html .= '</div>';
 
 		}
@@ -389,6 +401,7 @@ function mp_stacks_forms_radio_field( $post_id, $field_counter, $args = array() 
 		'field_select_values' => array(),
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
@@ -401,7 +414,7 @@ function mp_stacks_forms_radio_field( $post_id, $field_counter, $args = array() 
 			
 			
 			$return_html .= '<div class="mp-stacks-forms-radio-container">';
-			$return_html .= '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="radio" value="' . $field_select_value . '" class="mp-stacks-forms-field-radio" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ><div class="mp-stacks-forms-field-description">' . $field_select_value . '</div>';
+			$return_html .= '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="radio" value="' . $field_select_value . '" class="mp-stacks-forms-field-radio" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' ><div class="mp-stacks-forms-field-description">' . $field_select_value . '</div>';
 			$return_html .= '</div>';
 
 		}
@@ -425,11 +438,12 @@ function mp_stacks_forms_fileupload_field( $post_id, $field_counter, $args = arr
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
+		'field_required' => NULL
 	);
 	
 	$args = wp_parse_args( $args, $default_args );
 	
-	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="file" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-fileupload" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '"  />';
+	return '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="file" value="' . $args['preset_value'] . '" class="mp-stacks-forms-field-fileupload" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' />';
 	
 }
 
@@ -447,7 +461,8 @@ function mp_stacks_forms_taxonomy_field( $post_id, $field_counter, $args = array
 	$default_args = array(
 		'preset_value' => NULL,
 		'field_placeholder' => NULL,
-		'field_taxonomy' => NULL
+		'field_taxonomy' => NULL,
+		'field_required' => NULL
 	);
 	
 	$return_html = NULL;
@@ -459,7 +474,7 @@ function mp_stacks_forms_taxonomy_field( $post_id, $field_counter, $args = array
 	foreach( $tax_terms as $tax_term_id => $tax_term_name){
 		
 		$return_html .= '<div class="mp-stacks-forms-checkbox-container">';
-		$return_html .= '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '[]" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="checkbox" value="' . $tax_term_id . '" class="mp-stacks-forms-field-checkbox" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ><div class="mp-stacks-forms-field-description">' . $tax_term_name . '</div>';
+		$return_html .= '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '[]" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="checkbox" value="' . $tax_term_id . '" class="mp-stacks-forms-field-checkbox" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' ><div class="mp-stacks-forms-field-description">' . $tax_term_name . '</div>';
 		$return_html .= '</div>';
 			
 	}
