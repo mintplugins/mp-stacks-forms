@@ -1,7 +1,8 @@
 /*Styles for the UL containing the fields */
 .mp-stacks-form-field{
 	display:table;
-	margin:0px auto 0px auto;	
+	margin:0px auto 0px auto;
+	vertical-align:top;	
 }
 .mp-stacks-form-fields{
 	list-style:none;
