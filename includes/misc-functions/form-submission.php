@@ -7,7 +7,7 @@
  * @package    MP Stacks Forms
  * @subpackage Functions
  *
- * @copyright  Copyright (c) 2014, Mint Plugins
+ * @copyright  Copyright (c) 2016, Mint Plugins
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
@@ -96,68 +96,78 @@ function mp_stacks_forms_processs_form( $post_id ){
 		return array( 'success' => $success_message );
 	
 	}
-	
+		
 	//First lets handle any file uploads. Here, we loop through any file uploads.
 	$uploaded_files = NULL;
-	foreach( $_FILES as $key => $file_upload ){
 	
-		//Include the file upload script if it isn;t already loaded
-		if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	//If we are in mp_stacks_forms advanced mode, handle file uploads.
+	if ( mp_stacks_forms_mode() == 'advanced' ){
 		
-		//Get the uploaded file so we can pass it to WordPress file upload function
-		$uploadedfile = $_FILES[$key];
-		
-		//For the upload to actually happen, test_form must be set to false.
-		$upload_overrides = array( 'test_form' => false );
-		$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-		
-		//If the file was successfully uploaded
-		if ( !isset( $movefile['upload_error_handler'] ) && !isset( $movefile['error'] ) ) {
+		foreach( $_FILES as $key => $file_upload ){
 			
-			//Lets add it to the WordPress media library
-			$wp_upload_dir = wp_upload_dir();
-			$wp_filetype = wp_check_filetype(basename($movefile['file']), null );
-			$filepath = $movefile['file'];
-
-			$attachment = array(
-				'guid' => $wp_upload_dir['url'] . '/' . basename( $filepath ), 
-				'post_mime_type' => $wp_filetype['type'],
-				'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filepath ) ),
-				'post_content' => '',
-				'post_status' => 'inherit'
-			);
+			//Likely should have a nonce here - though from the front end nonces are sort of moot - no?
 			
-			$attach_id = wp_insert_attachment( $attachment, $filepath, 37 );
+			//Include the file upload script if it isn;t already loaded
+			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
 			
-			//Store the attachment id in an array so we can use the file attachment later on
-			$uploaded_files[$key] = array(
-				'meta_key' => $_POST[$key . '-field-meta-key'],
-				'attachment_id' => $attach_id,
-				'file_path' => $movefile['file'],
-				'file_url' => $movefile['url'],
-				'file_type' => $movefile['type'],
-			);
+			//Get the uploaded file so we can pass it to WordPress file upload function
+			$uploadedfile = $_FILES[$key];
 			
-			//If this is an image, we want to generate the thumbnails for it:
-			if ( $wp_filetype['type'] == 'image/jpeg' || $wp_filetype['type'] == 'image/png' ){
-				// we must first include the image.php file
-				// for the function wp_generate_attachment_metadata() to work
-				if ( ! function_exists( 'wp_crop_image' ) ) require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			//For the upload to actually happen, test_form must be set to false.
+			$upload_overrides = array( 'test_form' => false );
+			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+			
+			//If the file was successfully uploaded
+			if ( !isset( $movefile['upload_error_handler'] ) && !isset( $movefile['error'] ) ) {
 				
-				//Create the thumbnail sizes for this new image
-				$attach_data = wp_generate_attachment_metadata( $attach_id, $filepath );
-				wp_update_attachment_metadata( $attach_id, $attach_data );
-			}
-
-		} 
-		
+				//Lets add it to the WordPress media library
+				$wp_upload_dir = wp_upload_dir();
+				$wp_filetype = wp_check_filetype(basename($movefile['file']), null );
+				$filepath = $movefile['file'];
+				
+				$attachment = array(
+					'guid' => $wp_upload_dir['url'] . '/' . basename( $filepath ), 
+					'post_mime_type' => $wp_filetype['type'],
+					'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filepath ) ),
+					'post_content' => '',
+					'post_status' => 'inherit'
+				);
+				
+				$attach_id = wp_insert_attachment( $attachment, $filepath, 37 );
+				
+				//Store the attachment id in an array so we can use the file attachment later on
+				$uploaded_files[$key] = array(
+					'meta_key' => $_POST[$key . '-field-meta-key'],
+					'attachment_id' => $attach_id,
+					'file_path' => $movefile['file'],
+					'file_url' => $movefile['url'],
+					'file_type' => $movefile['type'],
+				);
+				
+				//If this is an image, we want to generate the thumbnails for it:
+				if ( $wp_filetype['type'] == 'image/jpeg' || $wp_filetype['type'] == 'image/png' ){
+					// we must first include the image.php file
+					// for the function wp_generate_attachment_metadata() to work
+					if ( ! function_exists( 'wp_crop_image' ) ) require_once( ABSPATH . 'wp-admin/includes/image.php' );
+					
+					//Create the thumbnail sizes for this new image
+					$attach_data = wp_generate_attachment_metadata( $attach_id, $filepath );
+					wp_update_attachment_metadata( $attach_id, $attach_data );
+				}
+	
+			} 
+			
+		}
 	}
+	
+	//Set up array to store redirect URLs for later
+	$redirect_urls = array();
 				
 	//Loop through each action we want to take when submitting this form
-	foreach( $mp_stacks_forms_submission_actions as $mp_stacks_forms_submission_actions ){
+	foreach( $mp_stacks_forms_submission_actions as $mp_stacks_forms_submission_action ){
 		
 		//If this action is to send an email continaing the form data
-		if ( $mp_stacks_forms_submission_actions['mp_stacks_forms_action'] == 'email' ){
+		if ( $mp_stacks_forms_submission_action['mp_stacks_forms_action'] == 'email' ){
 			
 			$body = NULL;
 									
@@ -215,10 +225,10 @@ function mp_stacks_forms_processs_form( $post_id ){
 			} 
 						
 			//Strip White Space out of the list of email addresses we want to send this form to
-			$mp_stacks_forms_emails = preg_replace('/\s+/', '', $mp_stacks_forms_submission_actions['mp_stacks_forms_emails'] );
+			$mp_stacks_forms_emails = preg_replace('/\s+/', '', $mp_stacks_forms_submission_action['mp_stacks_forms_emails'] );
 			
 			//Explode emails into array using commas
-			$mp_stacks_forms_emails = explode( ',', $mp_stacks_forms_submission_actions['mp_stacks_forms_emails'] );
+			$mp_stacks_forms_emails = explode( ',', $mp_stacks_forms_submission_action['mp_stacks_forms_emails'] );
 			
 			//Loop through all the uploaded files and list their URLs
 			
@@ -246,19 +256,24 @@ function mp_stacks_forms_processs_form( $post_id ){
 			$headers[] = 'Reply-To: ' . $reply_to_emails_string;
 								
 			//Send the form to each email address.
-			wp_mail( $mp_stacks_forms_emails, $mp_stacks_forms_submission_actions['email_subject_line'] , $body, $headers );
+			wp_mail( $mp_stacks_forms_emails, $mp_stacks_forms_submission_action['email_subject_line'] , $body, $headers );
 								
 		}
 		//If this action is to create a WP Post
-		else if ( $mp_stacks_forms_submission_actions['mp_stacks_forms_action'] == 'create_wp_post' ){
+		else if ( $mp_stacks_forms_submission_action['mp_stacks_forms_action'] == 'create_wp_post' ){
 			
+			//If we are not in mp_stacks_forms advanced mode, skip this action
+			if ( mp_stacks_forms_mode() != 'advanced' ){
+				continue;
+			}
+		
 			//Create a new mp_stacks_forms custom post
 			$new_mp_stacks_form_post = array(
 			  'post_author'    => 1,
 			  'post_name'      => 'temp', // The name (slug) for your post
 			  'post_title'     => 'temp', // The title of your post.
-			  'post_status'    => $mp_stacks_forms_submission_actions['wppost_post_status'], // Default 'draft'.
-			  'post_type'      => $mp_stacks_forms_submission_actions['wppost_post_type'],// Default 'post'.
+			  'post_status'    => $mp_stacks_forms_submission_action['wppost_post_status'], // Default 'draft'.
+			  'post_type'      => $mp_stacks_forms_submission_action['wppost_post_type'],// Default 'post'.
 			); 	
 			
 			//Create a wp post for this socialgrid item	
@@ -395,11 +410,25 @@ function mp_stacks_forms_processs_form( $post_id ){
 			}
 	
 		}
+		//If this action is to redirect the user
+		else if ( $mp_stacks_forms_submission_action['mp_stacks_forms_action'] == 'redirect' ){
+			
+			//Store the redirect for now until we are done looping through submission actions
+			$redirect_urls[] = $mp_stacks_forms_submission_action['mp_stacks_forms_redirect_url'];
+			
+		}
 		
 	}
 	
-	//Get the message we want to show the user when the form is successfully submitted
-	$success_message = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submission_success_message', __( 'Thanks for your entry. The form was successfully submitted!', 'mp_stacks_forms' ) );
+	//If we should redirect the user, redirect them to the last entered redirect
+	if ( !empty( $redirect_urls ) ){
+		$success_message = '<script type="text/javascript">window.location = "' . end( $redirect_urls ) . '";</script>';
+	}
+	else{
+		//Get the message we want to show the user when the form is successfully submitted
+		$success_message = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submission_success_message', __( 'Thanks for your entry. The form was successfully submitted!', 'mp_stacks_forms' ) );
+	}
+	
 	return array( 'success' => $success_message );
 }
 
@@ -464,10 +493,7 @@ function mp_stacks_forms_max_submissions_per_day( $post_id ){
  * @return   bool True if they have waited long enough - false if they still need to wait.
  */
 function mp_stacks_forms_submission_delay_reached( $post_id ){
-	
-	if( !session_id() )
-        session_start();
-		
+			
 	//Get the delay the user has set for this form (defaults to 20 seconds)
 	$submission_delay = mp_core_get_post_meta( $post_id, 'mp_stacks_forms_submission_delay', 20 );
 	
