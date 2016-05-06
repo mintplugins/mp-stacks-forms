@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 4.4
-Stable tag: 1.0.0.6
+Stable tag: 1.0.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,13 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.7 = May 5, 2016
+* Vertically align field to top
+* Added ability to make fields required
+* Added form submission action of "redirect" which allows you to redirect the user to any URL upon form submission. 
+* Added "Simple" and "Adanced" mode for form. Default to "Simple" Mode which means there are no file uploads or creation of WP posts.
+* Simple mode turns off file uploads and confusing options like meta keys. Advanced mode turns those back on but must be manually overridden through the 'mp_stacks_forms_mode' filter
 
 = 1.0.0.6 = December 17, 2015
 * Added important to hidden fields css to make sure they stay hidden in themes that explicitly set the display for inputs.
