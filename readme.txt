@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 4.4
-Stable tag: 1.0.0.7
+Tested up to: 4.8
+Stable tag: 1.0.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ This section describes how to install the plugin and get it working.
 
 1. Upload the 'mp-stacks-forms’ folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Build Bricks under the “Stacks and Bricks” menu. 
+3. Build Bricks under the “Stacks and Bricks” menu.
 4. Publish your bricks into a “Stack”.
 5. Put Stacks on pages using the shortcode or the “Add Stack” button.
 
@@ -33,10 +33,13 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.0.8 = August 10, 2017
+Add checks in Advanced mode to be sure that the meta key exists before requiring it on the frontend.
+
 = 1.0.0.7 = May 5, 2016
 * Vertically align field to top
 * Added ability to make fields required
-* Added form submission action of "redirect" which allows you to redirect the user to any URL upon form submission. 
+* Added form submission action of "redirect" which allows you to redirect the user to any URL upon form submission.
 * Added "Simple" and "Adanced" mode for form. Default to "Simple" Mode which means there are no file uploads or creation of WP posts.
 * Simple mode turns off file uploads and confusing options like meta keys. Advanced mode turns those back on but must be manually overridden through the 'mp_stacks_forms_mode' filter
 

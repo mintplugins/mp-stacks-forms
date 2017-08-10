@@ -11,7 +11,7 @@
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
- 
+
 /**
  * Short Description
  *
@@ -20,11 +20,15 @@
  * @see      function_name()
  * @param    array $args See link for description.
  * @return   void
- */ 
+ */
 function mp_stacks_forms_mode(){
-	
+
 	//Filter here to make it "Advanced". If it is advanced, it adds options for WP Post creation, File Uploads, and other confusing or more dangerous things.
 	return apply_filters( 'mp_stacks_forms_mode', 'simple' );
-	
+
 }
- 
+
+function mp_stacks_forms_enable_advanced_mode(){
+	return 'advanced';
+}
+//add_filter( 'mp_stacks_forms_mode', 'mp_stacks_forms_enable_advanced_mode' );
