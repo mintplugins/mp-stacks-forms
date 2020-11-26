@@ -91,9 +91,10 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
                     $form_field['field_select_values'] = explode( ',', str_replace( ', ', ',', $form_field['field_select_values'] ) );
 
                     //Output the field html
-                    ?>
+					?>
                     <li id="mp-stacks-forms-field-<?php echo $post_id; ?>-<?php echo $field_counter; ?>-li" class="mp-stacks-form-field" style="width:<?php echo $form_field['field_width']; ?>%; display:<?php echo $form_field['field_placement']; ?>;">
-                    <?php if ( !empty( $form_field['field_title'] ) ){ ?>
+					<label>
+					<?php if ( !empty( $form_field['field_title'] ) ){ ?>
                         <div class="mp-stacks-forms-field-title"><?php echo $form_field['field_title']; ?></div>
                     <?php } ?>
                     <?php if ( !empty( $form_field['field_description'] ) ){ ?>
@@ -139,7 +140,8 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
                             ?>
 
                         </div>
-                    </li>
+						</label>
+					</li>
                     <?php
 
                     //Increment the field counter
