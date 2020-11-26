@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 4.8
-Stable tag: 1.0.0.8
+Stable tag: 1.0.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.9 = November 26, 2020
+Add label wrapper around fields.
 
 = 1.0.0.8 = August 10, 2017
 Add checks in Advanced mode to be sure that the meta key exists before requiring it on the frontend.
