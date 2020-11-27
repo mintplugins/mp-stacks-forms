@@ -67,7 +67,7 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
 
 				<?php //Output the hidden field which will tell us when an mp_stacks_form has just been submitted ?>
 
-                <input type="text" name="mp_stacks_form" value="<?php echo $post_id; ?>" class="mp-stacks-forms-hidden" />
+                <label hidden>mp_stacks_form<input type="text" name="mp_stacks_form" value="<?php echo $post_id; ?>" class="mp-stacks-forms-hidden" /></label>
 
                 <?php
 
@@ -93,7 +93,7 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
                     //Output the field html
 					?>
                     <li id="mp-stacks-forms-field-<?php echo $post_id; ?>-<?php echo $field_counter; ?>-li" class="mp-stacks-form-field" style="width:<?php echo $form_field['field_width']; ?>%; display:<?php echo $form_field['field_placement']; ?>;">
-					<label>
+					<label for="<?php echo 'mp-stacks-forms-input-' . $post_id . '-' . $field_counter; ?>">
 					<?php if ( !empty( $form_field['field_title'] ) ){ ?>
                         <div class="mp-stacks-forms-field-title"><?php echo $form_field['field_title']; ?></div>
                     <?php } ?>
@@ -110,7 +110,8 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
                                     'field_placeholder' => $form_field['field_placeholder'],
                                     'field_select_values' => $form_field['field_select_values'],
 									'field_taxonomy' => $form_field['field_taxonomy'],
-									'field_required' => empty( $form_field['field_required'] ) ? NULL : 'required'
+									'field_required' => empty( $form_field['field_required'] ) ? NULL : 'required',
+									'field' => $form_field,
                                 );
 
                                 //Get the name of the function to show the right input field type
@@ -119,28 +120,29 @@ function mp_stacks_brick_content_output_forms($default_content_output, $mp_stack
                                 //Show the input field
                                 echo $input_field_function_name( $post_id, $field_counter, $args );
 
-                                //Output a hidden field which tells us title of this field
-                                echo '<input type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-title" value="' . $form_field['field_title'] . '" />';
-
-								//Output a hidden field which tells us the type of field this is
-                                echo '<input type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-type" value="' . $form_field['field_type'] . '" />';
-
-								//If this field is a taxonomy selector, output the taxonomy name
-								if ( !empty( $form_field['field_taxonomy']  ) ){
-									//Output a hidden field which tells us the preset value this field had
-									echo '<input type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-tax" value="' . $form_field['field_taxonomy'] . '" />';
-								}
-
-								//If we are in mp_stacks_forms advances mode, handle file uploads.
-								if ( mp_stacks_forms_mode() == 'advanced' && isset( $form_field['field_meta_key'] ) ){
-									//Output a hidden field which tells us the meta key to use when saving a new WP post.
-									echo '<input type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-meta-key" value="' . $form_field['field_meta_key'] . '" />';
-								}
                             }
                             ?>
 
-                        </div>
-						</label>
+						</div></label>
+						<?php
+							//Output a hidden field which tells us title of this field
+							echo '<label hidden for=mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-title" value="' . $form_field['field_title'] . '">' . $form_field['field_title'] . '<input hidden id="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-title" value="' . $form_field['field_title'] . '" type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-title" value="' . $form_field['field_title'] . '" /></label>';
+
+							//Output a hidden field which tells us the type of field this is
+							echo '<label hidden for="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-type" value="' . $form_field['field_type'] . '" >' . $form_field['field_type'] . '<input hidden id="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-type" value="' . $form_field['field_type'] . '" type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-type" value="' . $form_field['field_type'] . '" /></label>';
+
+							//If this field is a taxonomy selector, output the taxonomy name
+							if ( !empty( $form_field['field_taxonomy']  ) ){
+								//Output a hidden field which tells us the preset value this field had
+								echo '<label hidden for="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-tax" value="' . $form_field['field_taxonomy'] . '">' . $form_field['field_taxonomy'] . '<input hidden id="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-tax" value="' . $form_field['field_taxonomy'] . '" type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-tax" value="' . $form_field['field_taxonomy'] . '" /></label>';
+							}
+
+							//If we are in mp_stacks_forms advances mode, handle file uploads.
+							if ( mp_stacks_forms_mode() == 'advanced' && isset( $form_field['field_meta_key'] ) ){
+								//Output a hidden field which tells us the meta key to use when saving a new WP post.
+								echo '<label hidden for="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-meta-key">' . $form_field['field_meta_key'] . '<input hidden id="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-meta-key" type="text" class="mp-stacks-forms-hidden" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '-field-meta-key" value="' . $form_field['field_meta_key'] . '" /></label>';
+							}
+						?>
 					</li>
                     <?php
 
@@ -221,7 +223,7 @@ function mp_stacks_forms_textarea_field( $post_id, $field_counter, $args = array
 
 	$args = wp_parse_args( $args, $default_args );
 
-	return '<textarea name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" class=".mp-stacks-forms-field-textarea" tabindex="' . $field_counter . '" rows="10" cols="50"  placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' ></textarea>';
+	return '<textarea name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '"  class=".mp-stacks-forms-field-textarea" tabindex="' . $field_counter . '" rows="10" cols="50"  placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' ></textarea>';
 
 }
 
@@ -411,12 +413,20 @@ function mp_stacks_forms_radio_field( $post_id, $field_counter, $args = array() 
 		//Set default for the return HTML
 		$return_html = NULL;
 
+		$return_html .= '<fieldset>';
+		$return_html .= '<legend>' . $args['field_title'] . '</legend>';
+	
 		//Loop through each option in this dropdown
 		foreach ( $args['field_select_values'] as $field_select_value ){
 
 
 			$return_html .= '<div class="mp-stacks-forms-radio-container">';
-			$return_html .= '<input name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '" type="radio" value="' . $field_select_value . '" class="mp-stacks-forms-field-radio" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' ><div class="mp-stacks-forms-field-description">' . $field_select_value . '</div>';
+			$return_html .= '<input style="display: inline-block;" name="mp-stacks-forms-input-' .  $post_id . '-' . $field_counter . '" id="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '-' . sanitize_title( $field_select_value ) . '" type="radio" value="' . $field_select_value . '" class="mp-stacks-forms-field-radio" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '" ' . $args['field_required'] . ' >';
+			$return_html .= '<div class="mp-stacks-forms-field-description">';
+			$return_html .= '<label style="display: inline;" for="mp-stacks-forms-input-' . $post_id . '-' . $field_counter . '-' . sanitize_title( $field_select_value ) . '" type="radio" value="' . $field_select_value . '" class="mp-stacks-forms-field-radio" tabindex="'  . $field_counter . '" placeholder="' . $args['field_placeholder'] . '">';
+			$return_html .= $field_select_value;
+			$return_html .= '</label>';
+			$return_html .= '</div>';
 			$return_html .= '</div>';
 
 		}
